@@ -1,0 +1,68 @@
+ZOOM MEET LINK : https://jigsawacademy.zoom.us/meeting/register/tZYlcO-hpz8rGNFuAsAhKfRtAr4bNMnh82sw#/registration
+ZOOM PASSCODE : 780602
+
+LAUNCHING AN EC2 INSTANCE:
+
+Mail AWS Link : https://ravind.signin.aws.amazon.com/console 
+Mail Username : DLTAIBCB2A06@ravinsofttech.com
+Mail Password :  welSur99
+IP Address Checking Link (Just For Reference) : https://whatismyipaddress.com
+
+1.Create a Local Folder to save the ppk/ppm files --> Go to AWS Webiste Using the Link in Mail and Provide credentials given in Mail --> EC2 --> Then Region is N.Virginia
+   (For the purpose of this training).
+   Normally if it is not deloitte machine,you can go to AWS,then create account,then login before creating the EC2 Instance.
+2.Launch Instance(Yellowish Orange Button)
+3.Go to Name and tags then give a Name and then choose the macgine/instance as Amazon Linux 2 AMI (HVM)(the 2nd one) or any other as per need.
+   (We can specify the number of instances/machines needed also here).
+4.Create a new key pair and save the ppk/ppm file in a folder/use an existing key pair 
+5.Create a new key pair/use an existing security group --> In side click Launch Button
+6.Right click the instance and copy public key.
+7.(1)Go to putty gen in windows if you just have the ppm file or ppk file,then click file then load private key,
+       browse the file and select the ppk file,the click save private key and save the key file. 
+    (2)Alternatively in latest version,we can directly download the ppk file(in step-4),thus not needing to use putty-gen at all and
+       directly go to putty to configure your instance with the directly downloaded ppk file.
+8.Go to putty configuration/putty in windows and then copy paste the public id from instances in the
+  host name,don't change host port,then got to ssh --> auth --> Credentials --. Browse the ppk file and click open.
+  then in terminal then type and click ec2-user and the message will say "Authenticating with public key 'key_name'".
+9.Alternate is go to the folder containing the ppk file in laptop --> Get bash here --> type :
+  ssh -i hari_ec2_1.pem ec2-user@44.211.26.104 (ssh -i key-pair-filename.pem ec2-user@public_id 
+  (get public id by right clicking the instance)).If both methods dont work then just terminate this and start a new instance.
+10.Type Date to check if its working.
+
+
+SECURITY:
+
+1.go to instances --> then lick on an instance's security group name --> select security from instances page 
+  and right click the Security groups and open in new browser --> Then we can edit the security rules under 
+  inbound rules --> select a rule and then --> edit inbound rules to edit.
+2.you can change 'source(info)'(under the edit rules) to 'My IP' (if needed change the ip to your ip,example:'42:46:48:00'
+  and the click save rules.This is done so that even if someone else has your ppk file,he won't be able to access your instances,
+  otherwise if it is open from anywhere,then anyone with your ppk file can access your instances.
+3.Then run your putty configuration again (Otherwise if you go to putty and try to run something it will say connection timed out(error)).
+4. You can also add port type as SSH or HTTP or HTTPS etc..
+
+
+User Data Script --> httpd
+
+Now Excecute these commands in Putty after you go to the Putty terminal to run an example html file:
+
+COMMANDS:
+1.sudo yum update -y
+2.sudo yum install httpd -y
+3.sudo systemctl start httpd
+4.sudo systemctl enable httpd
+5.sudo chmod 777 -R /var/www/html/
+6.echo '<h1>Hello Hari!How are you?</h1>' > /var/www/html/index.html (index.html is the default home page of a website)
+7.Use ll to see the file and to see the contents use 'cat /var/www/html/index.html'.
+8.To view in the browser type public_id:http_port(example 80) to view this page in browser.If port is not configured,you should go to the security group,then click on type,
+   then choose http and choose port number as 80 or any other number then click save.
+
+USING USER DATA WITHOUT TYPING COMMANDS IN PUTTY TERMINAL (ALternative Way) :
+1.Create a new instance , give it a new name,then select the security groups and key-pairs.Then go to advanced options,then upload the file which you want or you can directly 
+   go to the space below and then copy the 'COMMNDS' above in the space below the 'upload files' button and then click launch instance.(The commands are the instructions script).
+2.Commands shoul be copied like this:
+     #!/bin/bash
+     All the other 6 Commands
+3.Then go to the browser and give the respective public_id:port to check if the process was successful.
+4.If the putty config throws an error,the just terminate this instance,create a new instance,then create a new .ppm/.ppk key file,configure .ppm using putty-gen if needed
+   and then modify its rules to have both http and ssh,then go to putty terminal and type and enter ec2-user/any other user name.
